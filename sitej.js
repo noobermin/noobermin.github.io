@@ -27,33 +27,56 @@ function init() {
 	    var id = idof(e.target);
 	    if (id !== "me" && id !== "work" &&  id !== "words") return;
 	    nav.addtempclass("transitout",200);
-	    setTimeout(function() {
-		nav.prune();
-		if (id == "me") {
-		    nav.append(
-			$mkel("p",{id:"pp"}).append(
-			    $mklink(
-				"1","1/","http://github.com/noobermin"
-			    ),
-			    $mklink(
-				"2","2/","http://instagram.com/windywalk"
-			    ),
-			    $mklink(
-				"3","3/","http://twitter.com/oneno_one"
-			    )
-			)
-		    )
-		} else if (id == "work") {
+	    setTimeout(function(){
+		if (id == "me") me();
+		else if (id == "work") {
+		    nav.prune();
 		    nav.inner("You expect something here?");
-		} else if (id == "words") {
-		    $byid("sidenav").addclass("shown");
-		    $byid("hr").addclass("hidden");
-		}
+		} else if (id == "words") words();
 		nav.addtempclass("newlink",1000);
 	    },200);
 	}
     );
+    //check url
+    var section=document.URL.split("#")[1];
+
+    if (section) {
+	if (section.match(/^words--.*/)) {
+	    section = section.replace(/^words--/,"");
+	    var el = $byid(section);
+	    if (el.el) {
+		words();
+		el.el.onclick();
+	    }
+	} else {
+	    console.log("incorrect link \""+section+"\"");
+	}
+    }
 }
+
+function me(){
+    var nav=$byid("nav");
+    nav.prune().append(
+	$mkel("p",{id:"pp"}).append(
+	    $mklink(
+		"1","1/","http://github.com/noobermin"
+	    ),
+	    $mklink(
+		"2","2/","http://instagram.com/windywalk"
+	    ),
+	    $mklink(
+		"3","3/","http://twitter.com/oneno_one"
+	    )
+	)
+    );
+}
+
+function words() {
+    $byid("nav").prune();
+    $byid("sidenav").addclass("shown");
+    $byid("hr").addclass("hidden");
+}
+
 function loadwords(url) {
     var xhr = mkxhr();
     xhr.onreadystatechange = function() {
@@ -68,13 +91,7 @@ function loadwords(url) {
 function writecontent(text) {
     var content = $byid("content");
     content.inner(text);
-    var els = content.el.getElementsByClassName("img-sq");
-    console.log(els);
-    var Img = new Image();
-    var imgs = [];
-    /*scroll-over showing*/
-    map(els,function(c){
-    });
     content.addclass("shown");
 }
+
 
