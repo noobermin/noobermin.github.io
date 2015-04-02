@@ -53,10 +53,6 @@ function init() {
 	    },200);
 	}
     );
-    //hack to the max
-    var waiter = {
-	setTimeout
-    };
 }
 function loadwords(url) {
     var xhr = mkxhr();
@@ -66,6 +62,7 @@ function loadwords(url) {
 	    writecontent(xhr.responseText);
     };
     xhr.open("GET",url,true);
+    xhr.overrideMimeType("text/html; charset=utf-8");
     xhr.send();
 }
 function writecontent(text) {
@@ -81,4 +78,3 @@ function writecontent(text) {
     content.addclass("shown");
 }
 
-function imageshower(){}
