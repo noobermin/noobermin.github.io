@@ -5,7 +5,6 @@ body {
 }
 #noobermin {
 	text-align: center;
-	font-size: 10em;
 	cursor:pointer;
 	/*border-bottom: 2px solid rgb(210,210,210);*/
 	width: 100%;
@@ -144,8 +143,6 @@ li:before{
 	display: block;
 	position: absolute;
 	background: rgb(0,100,160);
-	top: 9.66em;
-	left: 0px;
 	font-size: 1.2em;
 	animation: fade-down 0.47s ease-out;
 	-webkit-animation: fade-down 0.47s ease-out;
@@ -171,10 +168,7 @@ li:before{
 	z-index: 10;
 	position: relative;
 	color: #556;
-	min-height: 70%;
-	width: 48%;
 	background: white;
-	left: 22%;
 	padding: 1% 5%;
 	animation: move-corner 0.5s ease-out;
 	-webkit-animation: move-corner 0.5s ease-out;
@@ -209,6 +203,7 @@ li:before{
 	font-size: 1.5em;
 	color: #bb1;
 }
+
 @keyframes move-right{
 	0%{
 		transform-origin: 0px;
@@ -276,7 +271,7 @@ li:before{
 
 
 .img-sq {
-	width: 350px; height: 350px;
+	width: 70%; height: 70%;
 	margin-left: auto;
 	margin-right: auto;
 	display: block;
@@ -290,8 +285,8 @@ figure {
 	padding-bottom: 5px;
 	padding-left: 20px;
 	padding-right: 20px;
-	width: 390px;
 	border-radius: 4px;
+	width: 90%;
 	box-shadow: 1px 1px #ccc;
 }
 figcaption{

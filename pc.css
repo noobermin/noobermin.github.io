@@ -1,0 +1,22 @@
+/*bar*/
+
+#noobermin {
+  font-size: 10em;
+}
+
+#sidenav {
+  top: 9.66em;
+	left: 0px;
+	width: 25%;
+
+}
+
+#content.shown {
+  left: 22%;
+  width: 55%;
+  left: 17%;
+}
+
+#content .content-x{
+  display: none;
+}

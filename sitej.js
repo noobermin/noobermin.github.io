@@ -73,6 +73,7 @@ function me(){
 
 function words() {
     $byid("nav").prune();
+    $byid("content").prune().rmclass("shown");
     $byid("sidenav").addclass("shown");
     $byid("hr").addclass("hidden");
 }
@@ -90,8 +91,17 @@ function loadwords(url) {
 }
 function writecontent(text) {
     var content = $byid("content");
-    content.inner(text);
-    content.addclass("shown");
+    content.inner(
+	text
+    ).append(
+	$mkel(
+	    "span",{id:"content-x"},"content-x","⊗"
+	).evlis(
+	    "click",function(){console.log("hi");words()}
+	)   
+    ).addclass(
+	"shown"
+    );
 }
 
 

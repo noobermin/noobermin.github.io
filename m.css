@@ -1,0 +1,28 @@
+/*foo*/
+#noobermin {
+  font-size: 4.7em;
+}
+
+#sidenav.shown {
+  
+}
+
+#content.shown {
+  left: 5%;
+  width: 80%;
+}
+
+#content .content-x{
+  position: absolute;
+	font-weight: bold;
+	text-shadow: 1px 1px 3px #444;
+	height: 1em;
+	border-radius: 1em;
+	z-index 20;
+  display: block;
+  color: #233;
+	font-size: 3em;
+	top: -0.4%;
+	right: -4%;
+	cursor: pointer;
+}
