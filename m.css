@@ -1,6 +1,6 @@
 /*foo*/
 #noobermin {
-  font-size: 4.7em;
+  font-size: 4.0em;
 }
 
 #sidenav.shown {
@@ -8,21 +8,20 @@
 }
 
 #content.shown {
-  left: 5%;
-  width: 80%;
+  left: 1%;
+  width: 88%;
 }
 
 #content .content-x{
   position: absolute;
 	font-weight: bold;
 	text-shadow: 1px 1px 3px #444;
-	height: 1em;
 	border-radius: 1em;
 	z-index 20;
   display: block;
   color: #233;
-	font-size: 3em;
-	top: -0.4%;
-	right: -4%;
+	font-size: 4em;
+	top: -0.2%;
+	right: -3%;
 	cursor: pointer;
 }
