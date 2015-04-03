@@ -10,7 +10,10 @@
 	width: 25%;
 
 }
-
+.img-sq{
+   width: 70%; 
+	 height: 70%;
+}
 #content.shown {
   left: 22%;
   width: 55%;

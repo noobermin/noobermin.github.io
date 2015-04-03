@@ -7,6 +7,11 @@
   
 }
 
+.img-sq{
+	width: 250px; 
+	height: 250px;
+}
+
 #content.shown {
   left: 1%;
   width: 88%;
@@ -24,4 +29,5 @@
 	top: -0.2%;
 	right: -3%;
 	cursor: pointer;
+	font-family: Veranda;
 }
