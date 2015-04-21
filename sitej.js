@@ -1,75 +1,67 @@
 function $mklink(id,text,url) {
     if (url) {
-	return $mkel(
-	    "a",{id:id, href:url},
-	    "link",text);
+	    return $mkel(
+	        "a",{id:id, href:url},
+	        "",text
+        );
     }
     return $mkel(
-	"a",{id:id},
-	"link",text
+	    "a",{id:id},
+	    "",text
     );
 }
-
-function init() {
-    console.log("started");
-    $byid("hr").rmclass("hidden");
-    $byid("sidenav").rmclass("shown");
+function refresh() {
+    console.log("refreshing...");
+    //$byid("sidenav").rmclass("shown");
     $byid("content").rmclass("shown");
-    var nav = $byid("nav");
-    nav.prune().append(
-	$mklink("me","me."),
-	$mklink("work","work."),
-	$mklink("words","words.")
-    ).addtempclass(
-	"newlink",300
-    ).evlis(
-	"click", function(e) {
-	    var id = idof(e.target);
-	    if (id !== "me" && id !== "work" &&  id !== "words") return;
-	    nav.addtempclass("transitout",200);
-	    setTimeout(function(){
-		if (id == "me") me();
-		else if (id == "work") {
-		    nav.prune();
-		    nav.inner("You expect something here?");
-		} else if (id == "words") words();
-		nav.addtempclass("newlink",1000);
-	    },200);
-	}
-    );
-    //check url
+    $byid("hr").rmclass("hidden");
     var section=document.URL.split("#")[1];
-
-    if (section) {
-	if (section.match(/^words--.*/)) {
-	    section = section.replace(/^words--/,"");
-	    var el = $byid(section);
-	    if (el.el) {
-		words();
-		el.el.onclick();
-	    }
-	} else {
-	    console.log("incorrect link \""+section+"\"");
-	}
+    if (!section) {
+        $byid("top").addclass("shown");
+    } else if (section.match(/^words/) || section.match(/^work/)) {
+        $byid("hr").addclass("hidden");
     }
 }
-
-function me(){
-    var nav=$byid("nav");
-    nav.prune().append(
-	$mkel("p",{id:"pp"}).append(
-	    $mklink(
-		"1","1/","http://github.com/noobermin"
-	    ),
-	    $mklink(
-		"2","2/","http://instagram.com/windywalk"
-	    ),
-	    $mklink(
-		"3","3/","http://twitter.com/oneno_one"
-	    )
-	)
+function init() {
+    console.log("started");
+    refresh();
+    var nav = $byid("nav");
+    nav.evlis(
+	    "click", function(e) {
+	        var id = idof(e.target);
+            var div;
+            if (e.target.tagName === "A") {
+                div = e.target.parentElement;
+                rmclass(div,"shown");
+                //hack for now
+                console.log(e.target.href);
+                if (e.target.href) {
+                    var section = e.target.href.split("#")[1];
+                    if (section ==="work" || section ==="words")
+                        $byid("hr").addclass("hidden");
+                }
+            }
+        }
     );
+    return;
+    /* fix this.
+    var section=document.URL.split("#")[1];
+    
+    if (section) {
+	    if (section.match(/^words--.)) {
+	        section = section.replace(/^words--/,"");
+	        var el = $byid(section);
+	        if (el.el) {
+		        words();
+		        el.el.onclick();
+	        }
+	    } else {
+	        console.log("incorrect link \""+section+"\"");
+	    }
+    }
+    */
 }
+
 
 function words() {
     $byid("nav").prune();
@@ -78,30 +70,56 @@ function words() {
     $byid("hr").addclass("hidden");
 }
 
-function loadwords(url) {
+function getfile(url, f){
     var xhr = mkxhr();
     xhr.onreadystatechange = function() {
-	console.log("got response");
-	if(xhr.readyState === 4 && xhr.status === 200)
-	    writecontent(xhr.responseText);
+	    console.log("got response");
+	    if(xhr.readyState === 4)
+	        f(xhr.responseText);
     };
+    console.log(document.domain);
     xhr.open("GET",url,true);
-    xhr.overrideMimeType("text/html; charset=utf-8");
+    xhr.overrideMimeType("text/plain; charset=utf-8");
     xhr.send();
 }
+
+function loadcontent(url) {
+    getfile(url,writecontent);
+}
+
 function writecontent(text) {
     var content = $byid("content");
     content.inner(
-	text
+	    text
     ).append(
-	$mkel(
-	    "span",{id:"content-x"},"content-x","⊗"
-	).evlis(
-	    "click",function(){console.log("hi");words()}
-	)   
+	    $mkel(
+	        "span",{id:"content-x"},"content-x","⊗"
+	    ).evlis(
+	        "click",function(){
+                $byid("content").prune().rmclass("shown");
+            }
+	    )
     ).addclass(
-	"shown"
+	    "shown"
     );
 }
 
-
+function classnotes(){
+    loadcontent("classnotes.htm");
+    getfile("springnotes/manifest.json",
+            function(text){
+                $byid("springnotes").append(
+                    $mkel("ul").append(
+                        JSON.parse(text).map(function(c){
+                            return $mkel("li").append(
+                                $mklink("",
+                                        c.url.replace(/springnotes\//,""),
+                                        c.url)
+                            );
+                        })     
+                    )
+                );
+                
+            }
+    );
+}
