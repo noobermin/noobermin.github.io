@@ -103,23 +103,3 @@ function writecontent(text) {
 	    "shown"
     );
 }
-
-function classnotes(){
-    loadcontent("classnotes.htm");
-    getfile("springnotes/manifest.json",
-            function(text){
-                $byid("springnotes").append(
-                    $mkel("ul").append(
-                        JSON.parse(text).map(function(c){
-                            return $mkel("li").append(
-                                $mklink("",
-                                        c.url.replace(/springnotes\//,""),
-                                        c.url)
-                            );
-                        })     
-                    )
-                );
-                
-            }
-    );
-}

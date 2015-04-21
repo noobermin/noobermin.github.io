@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo `cat classnotes-header.txt` '<div id="springnotes"><ul>' `./genlinks` '</ul></div>'
