@@ -83,11 +83,11 @@ function getfile(url, f){
     xhr.send();
 }
 
-function loadcontent(url) {
-    getfile(url,writecontent);
+function loadcontent(url,instagram) {
+    getfile(url,function(text){writecontent(text,instagram);});
 }
 
-function writecontent(text) {
+function writecontent(text,instagram) {
     var content = $byid("content");
     content.inner(
 	    text
@@ -102,4 +102,8 @@ function writecontent(text) {
     ).addclass(
 	    "shown"
     );
+    if (instagram) {
+        console.log("holla");
+        instgrm.Embeds.process();
+    }
 }

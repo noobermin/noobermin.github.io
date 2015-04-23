@@ -204,12 +204,29 @@ li:before{
 	box-shadow: 0px 2px 10px 2px #555;
 }
 
-#content.shown p:last-child:after{
+#content:last-child p:after{
 	content:" ☐";
 }
 #content.shown h1{
 	color: rgb(0,190,190);
+	text-shadow: 0px 1px 1px #ccc;
 }
+#content.shown header span{
+	color: rgb(100,190,190);
+}
+#content.shown header span:before{
+	content: "🖙";
+	color: rgb(0,0,0);
+	font-size: 150%;
+	position: relative;
+	top: 0.2em;
+}
+#content.shown header{
+	margin-bottom: 1em;
+}
+
+
+
 #content.shown h2{
 	color: rgb(0,200,200);
 	text-shadow: 0px 1px 1px #ccc;
