@@ -36,23 +36,23 @@ div.centered{
   margin-right: auto;
 	text-align: center;
 }
-#nav{
+nav{
 	text-align: center;
 }
-#nav #top{
+nav #top{
 	display: none;
 }
-#nav #top.shown{
+nav #top.shown{
 	display: block;
 	animation: fade-down 0.3s ease-in;
 	-webkit-animation: fade-down 0.3s ease-in;
 	animation-iteration-count: 1;
 	-webkit-animation-iteration-count: 1;
 }
-#nav div#me{
+nav div#me{
 	display: none;
 }
-#nav div#me:target{
+nav div#me:target{
 	display: block;
 	animation: fade-down 0.3s ease-in;
 	-webkit-animation: fade-down 0.3s ease-in;
@@ -60,7 +60,7 @@ div.centered{
 	-webkit-animation-iteration-count: 1;
 }
 
-#nav a{
+nav a{
 	display: inline;
 	position: relative;
 	margin: 0.0 0.2em;
@@ -69,7 +69,7 @@ div.centered{
 	transition: 0.13s ease-in;
 	text-shadow: 0px 0.6em 1em #222;
 }
-#nav a:hover{
+nav a:hover{
   color: rgb(0,110,210);
 	-webkit-transition: 0.13s ease-in;
 	transition: 0.13s ease-in;
