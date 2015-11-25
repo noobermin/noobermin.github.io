@@ -1,3 +1,5 @@
+importinto($dom);
+importinto(dom);
 function $mklink(id,text,url) {
     if (url) {
 	    return $mkel(
@@ -25,7 +27,7 @@ function refresh() {
 function init() {
     console.log("started");
     refresh();
-    var nav = $byid("nav");
+    var nav = $(document.getElementsByTagName("nav")[0]);
     nav.evlis(
 	    "click", function(e) {
 	        var id = idof(e.target);
