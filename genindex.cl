@@ -101,7 +101,7 @@
               id url title date kw
               (datestr-to-unix date)))))))
     ;;sort by unix time
-    (setq pairs (sort pairs #'<
+    (setq pairs (sort pairs #'>
                       :key(lambda (i) (elt i 5))))
     (setq ret (reduce (lambda (a b) (strcat a b))
             ($maps
