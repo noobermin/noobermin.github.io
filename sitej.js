@@ -1,20 +1,13 @@
 importinto($dom);
 importinto(dom);
 function $mklink(id,text,url) {
-    if (url) {
-	    return $mkel(
-	        "a",{id:id, href:url},
-	        "",text
-        );
-    }
-    return $mkel(
-	    "a",{id:id},
-	    "",text
-    );
+    var r = $mkel("a",{id:id},"",text);
+    url && r.attr("href",url);
+    return r;
 }
 function refresh() {
     console.log("refreshing...");
-    //$byid("sidenav").rmclass("shown");
+    $byq("nav").rmclass("shown");
     $byid("content").rmclass("shown");
     $byid("hr").rmclass("hidden");
     var section=document.URL.split("#")[1];
@@ -24,19 +17,30 @@ function refresh() {
         $byid("hr").addclass("hidden");
     }
 }
+function getwordstags(){
+    var words = $byqs("#words ul li");
+    console.log(words);
+}
+/*a bunch of dirty hacks for javascript
+  enabled browsers*/
+function firsthacks(){
+    $byqs("#words li a").forEach(function(c){
+        var href = c.attr("href");
+        c.attr("href","").evlis("click",function(e){
+            e.preventDefault();
+            loadcontent(href,true);//for now, just enable embeds because I'm tired of hacking on this.
+        })
+    });
+}
 function init() {
-    console.log("started");
+    firsthacks();
     refresh();
-    var nav = $(document.getElementsByTagName("nav")[0]);
-    nav.evlis(
+    $byq("nav").evlis(
 	    "click", function(e) {
-	        var id = idof(e.target);
             var div;
             if (e.target.tagName === "A") {
                 div = e.target.parentElement;
                 rmclass(div,"shown");
-                //hack for now
-                console.log(e.target.href);
                 if (e.target.href) {
                     var section = e.target.href.split("#")[1];
                     if (section ==="work" || section ==="words")
@@ -66,24 +70,19 @@ function init() {
 
 
 function words() {
-    $byid("nav").prune();
+    $byq("nav").prune();
     $byid("content").prune().rmclass("shown");
     $byid("sidenav").addclass("shown");
     $byid("hr").addclass("hidden");
 }
 
 function getfile(url, f){
-    var xhr = mkxhr();
-    xhr.onreadystatechange = function() {
-	    console.log("got response");
-	    if(xhr.readyState === 4)
-	        f(xhr.responseText);
-    };
-    console.log(document.domain);
-    xhr.open("GET",url,true);
-    xhr.overrideMimeType("text/plain; charset=utf-8");
-    xhr.send();
+    request(
+        url,"","GET",
+        {overrideMimeType:"text/plain; charset=utf-8"}
+    ).then(f);
 }
+
 
 function loadcontent(url,instagram) {
     getfile(url,function(text){writecontent(text,instagram);});
@@ -105,7 +104,6 @@ function writecontent(text,instagram) {
 	    "shown"
     );
     if (instagram) {
-        console.log("holla");
         instgrm.Embeds.process();
     }
 }

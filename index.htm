@@ -1,60 +1,58 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html><head>
 	<title>noobermin</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
     <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-	<link href="style.css" rel="stylesheet" type="text/css"/>
-	<link href="pc.css" media="(min-width: 700px)" rel="stylesheet"  type="text/css" />
-	<link href="m.css" media="(max-width: 700px)" rel="stylesheet"  type="text/css" />
-	<script src="jss/htm.js"></script>
-	<script src="jss/ani.js"></script>
-	<script src="sitej.js"></script>
-    <script async defer src="http://platform.instagram.com/en_US/embeds.js"></script>
-  </head>
-  <body>
-    <div id="noobermin" onclick="window.location.href='';">noobermin</div>
-	<hr id="hr"/>
-	<nav>
-      <div id="top">
-        <a id="melink" href="#me">me.</a>
-        <a id="worklink" href="#work">work.</a>
-        <a id="wordslink" href="#words">words.</a>
-      </div>
-      <div id="me">
-        <a id="1" href="http://github.com/noobermin">1/</a>
-        <a id="2" href="http://instagram.com/windywalk"">2/</a>
-        <a id="3" href="http://twitter.com/noobermin">3/</a>
-      </div>
-    </nav>
-	<div id="body">
-	  <div id="sidenav">
-        <div id="words">
-		  <h2>words</h2>
-		  <ul>
-			<li>
-			  <a id="real-yaki-soba" onclick="loadcontent('yakisoba.htm',true)">
-                Real Yaki Soba
-              </a>
-			</li>
-		  </ul>
-        </div>
-        <div id="work">
-		  <h2>work</h2>
-          <h3>Teacher Assistantship</h3>
-		  <ul>
-			<li>
-			  <a id="Class Notes" onclick="loadcontent('springnotes/classnotes.htm')">
-                Previous Notes
-              </a>
-			</li>
-		  </ul>
-        </div>
-      </div>
-      <div id="content">
-	  </div>
-    </div>
-	<script>window.onload=init;</script>
+	<link href='style.css' rel='stylesheet' type='text/css'/>
+	<link href='pc.css' media='(min-width: 700px)' rel='stylesheet'  type='text/css' />
+	<link href='m.css' media='(max-width: 700px)' rel='stylesheet'  type='text/css' />
+	<script src='jss/htm.js'></script>
+	<script src='jss/ani.js'></script>
+	<script src='sitej.js'></script>
+    <script async defer src='http://platform.instagram.com/en_US/embeds.js'></script>
+</head>
+<body>
+<div id="noobermin" onclick="window.location.href='';">noobermin</div>
+<hr id='hr'/><nav id='topnav'>
+  <div id='top'>
+    <a id='melink' href='#me'>me.</a>
+    <a id='worklink' href='#work'>work.</a>
+    <a id='wordslink' href='#words'>words.</a>
+  </div>
+  <div id='me'>
+    <a id='1' href='http://github.com/noobermin'>1/</a>
+    <a id='2' href='http://instagram.com/windywalk''>2/</a>
+    <a id='3' href='http://twitter.com/noobermin'>3/</a>
+   </div>
+</nav><div id='main'>
+<nav id='sidenav'><div id='words'>
+<h2>words</h2>
+<ul>
+<li>
+  <a id='yakisoba' href='words/yakisoba.htm'>Real Yaki Soba</a>
+  <time>April 23, 2015</time>
+  <span class='wordstag'>Japan</span><span class='wordstag'>yakisoba</span><span class='wordstag'>noodles</span><span class='wordstag'>travel</span><span class='wordstag'>Palau</span><span class='wordstag'>Tokyo</span><span class='wordstag'>culture</span>
+</li>
+<li>
+  <a id='childatterm' href='words/childatterm.htm'>On</a>
+  <time>November 28, 2015</time>
+  <span class='wordstag'>poetry</span><span class='wordstag'>computing</span><span class='wordstag'>hacking</span><span class='wordstag'>childhood</span><span class='wordstag'>life</span>
+</li>
+</ul>
+</div><div id='work'>
+  <h2>work</h2>
+  <h3>Teacher Assistantship</h3>
+  <ul>
+    <li>
+	  <a id="Class Notes" onclick="loadcontent('springnotes/classnotes.htm')">
+        Previous Notes
+      </a>
+    </li>
+  </ul>
+</div></nav>
+<div id='content'></div>
+</div>
+<script>window.onload=init;</script>
 </body>
 </html>
