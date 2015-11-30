@@ -50,7 +50,7 @@
   (loop
      for month-rx in *months-rx*
      for i = 0 then (+ i 1)
-     do (if (scan month-rx s) (return i))
+     do (if (scan month-rx s) (return (+ 1 i)))
      finally (error "not given a valid month string")))
 (defun datestr-to-date (s)
   (let ((date (getmatches *us-date-partsrx* s)))
