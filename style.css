@@ -64,7 +64,6 @@ div.centered{
 	display: inline;
 	position: relative;
 	margin: 0.0 0.2em;
-	font-size: 2em;
 	-webkit-transition: 0.13s ease-in;
 	transition: 0.13s ease-in;
 	text-shadow: 0px 0.6em 1em #222;
@@ -209,9 +208,9 @@ li:before{
 	padding: 1% 5%;
 	animation: move-corner 0.5s ease-out;
 	-webkit-animation: move-corner 0.5s ease-out;
-	font-family: 'Georgia';
-	font-weight: light;
-	font-size: 1.05em;
+	font-family: "Average";
+	font-size: 1.2em;
+	text-align: justify;
 	box-shadow: 0px 2px 10px 2px #555;
 }
 
@@ -350,7 +349,11 @@ li:before{
 	}
 }
 
-
+/*code stuff*/
+pre{
+	background: rgb(180,200,200);
+}
+/*image stuff*/
 .img-sq {
 	margin-left: auto;
 	margin-right: auto;

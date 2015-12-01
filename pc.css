@@ -1,7 +1,10 @@
 /*bar*/
 
 #noobermin {
-  font-size: 10em;
+  font-size: 15vw;
+}
+#topnav a{
+  font-size: 5vw;
 }
 
 #sidenav {

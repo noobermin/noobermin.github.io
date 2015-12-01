@@ -1,7 +1,9 @@
 #noobermin {
   font-size: 4.0em;
 }
-
+#topnav a{
+  font-size: 2.0em;
+}
 #sidenav.shown {
   
 }
