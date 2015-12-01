@@ -236,11 +236,7 @@ li:before{
 }
 
 #content.shown header span:before{
-	content: "🖙";
-	color: rgb(0,0,0);
-	font-size: 150%;
-	position: relative;
-	top: 0.2em;
+	content: " 🙚 ";
 }
 #content.shown header{
 	margin-bottom: 1em;
