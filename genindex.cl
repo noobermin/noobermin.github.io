@@ -162,7 +162,7 @@
   </div>
   <div id='me'>
     <a id='1' href='http://github.com/noobermin'>1/</a>
-    <a id='2' href='http://instagram.com/windywalk''>2/</a>
+    <a id='2' href='http://instagram.com/windywalk'>2/</a>
     <a id='3' href='http://twitter.com/noobermin'>3/</a>
    </div>
 </nav>")
