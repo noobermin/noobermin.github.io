@@ -261,6 +261,13 @@ li:before{
 	font-size: 1.5em;
 	color: #bb1;
 }
+#content blockquote.long{
+	text-align: justify;
+	font-size: 1em;
+  color: #556;
+	text-shadow: none;
+}
+
 #content div#springnotes{
 }
 #content ul{

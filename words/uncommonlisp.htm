@@ -1,0 +1,70 @@
+<header>
+    <h1>Uncommon Lisp</h1>
+    <span>A rant about "Common" Lisp.</span>
+    <time>December 2, 2015</time>
+    <meta name="keywords" content="rant, common lisp, hacking, recreational hacking"/>
+</header>
+<p>
+    Ugh. Seriously ugh.
+</p>
+<p>
+    I am <em>almost</em> done with that paper that I've promised my advisor I'd get done this week. Nonetheless, as per usual, I needed a little distraction. What better of a way to code? It's all I do for fun anyway, whether I actually code anything really useful or relevant for anyone other than me.
+</p>
+<p>
+    That "fun" began this friday. My not-anything-really-useful-or-relevant target? This blog, of course. I started putting in a poem (I broke my "linking system" arghhh, otherwise I'd link it, coming soon!), then I thought, "hmm, this is too tedious!"...you can see where this is going; there's this hacker maxim somewhere--or it should be one at least--that if you repeat an action more than twice, it's time to write something to do it for you. "On" was the number two repetition of putting post on this blog, but I was feeling a bit eager to skip the "more than twice" part of my adage head straight to the script-writing bit. Regardless, I'm coding for fun! Right!? So, this was my chance to have a little non-physics fun and script up a site generator.
+</p>
+<p>
+    I first had breakfast this morning at this new place called <a href="http://saltandpine250.com/">Salt & Pine</a> (really good by the way!) and planned where to get coffee and put up a tent, under which to continue my "fun". This would have been baby's first script in python, but I had decided earlier to use common lisp.
+</p>
+<p>
+    My girlfriend is into lame jokes, childish contradictions...the sort of jokes you see in facebook "meme's" or silly youtube vids. I'd say, "What's up", to which she'd reply, "What's down." I came up with one which gave me a chuckle walking on my way to coffee..."rare lisp." Later that day, she gave me her own version:
+</p>
+<h2>"Uncommon Lisp"</h2>
+<p>
+I remember learning javascript, at first, it felt so unnatural compared to my old C++ or python...still, there might be a converse to that old exhortation--another invented adage of some kind!: "don't confuse familiarity with ease of use." </p>
+<p>
+Common lisp currently feels that way. It has a rather different syntax from the C-flavored coding most of us are used to. It'sunfamiliar, thus difficult, but I know better than to call it difficult. Still, starting my programming spree, I'm enthusiastic! Thinking back to a few months ago, the "list" part of lisp got me excited first, since I do almost everything with list comprehensions, and now that I hack in javascript more naturally, a lot of my code looks like
+<pre>var val=somearrayreturningf().map(
+    (c) => mapped(c)
+).reduce(
+    (p,c)=>reducer(p,c)
+, initialvalue)
+</pre>
+and so on and so forth. I was excited because I was finally going to hack in the tongue where list-hacking originated! I mean, who hasn't read Paul Graham's extoling the virtues of Lisp, or that old (actual) adage of <a href="https://en.wikipedia.org/wiki/Greenspun's_tenth_rule">Greenspun</a> "Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp." I was finally going to touch the hem of God, to handle the reigns only reserved for the experience, to speak in the tongue of the greats, common lisp!
+</p>
+<p>
+Unfortunately, I'm not quite at PG's level of heavenly leet-lisp-ness yet. Still, I've managed, to some <a href="https://github.com/noobermin/noobermin.github.io/blob/master/genindex.cl">extent</a>. One of the things you might notice is I try to make it javascript-y. One of the things I'm still not quite used to is that lispy map-chaining (not sure the correct term for this) is <em>reversed</em> from the way I'm used to it. Lisp requires you to look from inner to outer:
+<pre>(reduce #'reducer
+  (mapcar #'mapped2 (mapcar #'mapped1 *some-list*)))
+</pre>
+To know what goes on, you need to read "right to left", or in the case of other indentation
+<pre>(reduce #'reducer
+  (mapcar #'mapped2 
+    (mapcar #'mapped1 *some-list*)))
+</pre>
+where now, you read <em>"bottom-up"</em>. This gets more difficult (for my non-lisp brain, at least) to read when I start using lambdas over named functions, I'm used to javascript where the fact that map and reduce and friends are methods of the Array object, so it allows, what I think is a more natural reading of "this happens, then this happens, then we gather up." It reads like a recipe, or a proof, or even a story in a book. Perhaps the lispy way has its own method to it, I just haven't figured it out yet.
+</p>
+<p>This is basically what <code>$maps</code> is, it essentially reverses the order of application to give me back my javascript-y syntax. I realize then that I'm not really learning how to program in lisp, then, I'm just programming in javascript with lisp syntax, but it helps me for now. I do also admit that syntax really is the most artificial thing to dread in any programming language (excluding the extreme outliers like brainfuck), but yes, learning to express my ideas in a new language will take time.
+</p>
+<p>So, I was happily hacking away, I wrote <code>$maps</code> and was working down my lambdas  when I realized I needed a way to sort my pages by date. Well, I needed something that extracted dates from said pages. Easy enough, I'll just include a time tag in the header, and parse that. "Parse", that's when things went down hill. <em>Either I'm a dummy, or apparently, there is no library for this!</em> That's right, something I would have found interesting when I was 15 or so, but certainly don't want to have to implement every couple of months, no one has decided to hack it and put it in a library.</p>
+<p>
+    Okay, okay, I'm sure something does exist out there. Plus, parsing dates <em>right</em> is tricky when you have to worry about internationalization and different formats or whatever. But, for me, to implement a US-ish date parser again, in 2015, for a language and ecosystem that is 30+ years old, really?
+</p>
+<p>
+No problem, I did it, and it works for now...thank god for regex. Still, the idea that I had a full featured regex library and a time library like local-time but no date parser boggles the mind.
+</p>
+<p>
+    So, I hacked up the date parser and regexes for it, and testing it was okay, until linedit for sbcl was funking up. <a href="https://common-lisp.net/project/linedit/">Linedit</a> is a library which gives <a href="http://www.sbcl.org/">sbcl</a>, a popular interpreter for lisp, a readline-like experience. It does this thing where it erases characters towards the start of the line as you type. It did this before, but in the heat of rapid-repl'ing, little quirks get really annoying. So, I stopped and googled linedit. Finding their webpage, I clicked on the link that said "git" in it. At the time, I couldn't load it, but looking at it now, the last update to their git repos was <a href="https://gitlab.common-lisp.net/linedit/linedit/commit/dc616acb316f6a8da6cc829eef23f0e5833e5a89">6 months ago</a>. Curious, I searched up other tools I use...6 months was common, a few hadn't been touched in years.
+</p>
+<p>
+    Exasperated, I googled the text "is common lisp dead." I found the following <a href="http://qr.ae/RbAW3U">Quora answer</a> to an <a href="http://qr.ae/RbAWBq">almost related question</a>:
+    <blockquote class="long">In my opinion, the problem with Common Lisp is its community. I can't say that the CL community is dead, but it definitely smells funny. The Common Lisp standard hasn't been updated in a long time (I think since 1994), and there are a lot of things missing from the standard such as libraries for network programming and multithreading. Of course the community provides a lot of libraries which one can conveniently use via http://www.quicklisp.org/, but they're not that many and not all of them are well documented or maintained. So I think these are some of the reasons why Common Lisp isn't widely used, it's not really a "batteries included" language that you would always turn to, unless you're willing to write your own libraries.</blockquote>
+</p>
+    <p>Welp, thanks Paul Graham. You sold me on almost-vaporware. But there is hope
+<blockquote class="long">Clojure on the other hand has an awesome community. The language is very well designed, and the libraries are great.</blockquote>
+    </p>
+<p>
+    Clojure is this lisp for the JVM. It sounded cool, so I'm keen to try it at some point.
+</p>
+<p>Common Lisp was so-called because <a href="http://www.gigamonkeys.com/book/introduction-why-lisp.html#where-it-began">back in the day</a>, there were a bunch of different dialects of lisp, and they basically wanted to standardize a certain version of it. Unfortunately, more and more, it seems like Common Lisp is rather uncommon, with vibrant communities seemingly few in number or at least very well hidden. Nonetheless, I definitely want to still learn common lisp, just because I've started. Regardless, this is just for fun, right?
+</p>
