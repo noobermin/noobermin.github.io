@@ -11,24 +11,24 @@
     I am <em>almost</em> done with that paper that I've promised my advisor I'd get done this week. Nonetheless, as per usual, I needed a little distraction. What better of a way to code? It's all I do for fun anyway, whether I actually code anything really useful or relevant for anyone other than me.
 </p>
 <p>
-    That "fun" began this friday. My not-anything-really-useful-or-relevant target? This blog, of course. I started putting in a poem (I broke my "linking system" arghhh, otherwise I'd link it, coming soon!), then I thought, "hmm, this is too tedious!"...you can see where this is going; there's this hacker maxim somewhere--or it should be one at least--that if you repeat an action more than twice, it's time to write something to do it for you. "On" was the number two repetition of putting post on this blog, but I was feeling a bit eager to skip the "more than twice" part of my adage head straight to the script-writing bit. Regardless, I'm coding for fun! Right!? So, this was my chance to have a little non-physics fun and script up a site generator.
+    That "fun" began this friday. My not-anything-really-useful-or-relevant target? This blog, of course. I started putting in a poem (I broke my "linking system" arghhh, otherwise I'd link it, coming soon!), then I thought, "hmm, this is too tedious!"…you can see where this is going; there's this hacker maxim somewhere—or it should be one at least—that if you repeat an action more than twice, it's time to write something to do it for you. "On" was the number two repetition of putting post on this blog, but I was feeling a bit eager to skip the "more than twice" part of my adage head straight to the script-writing bit. Regardless, I'm coding for fun! Right!? So, this was my chance to have a little non-physics fun and script up a site generator.
 </p>
 <p>
     I first had breakfast this morning at this new place called <a href="http://saltandpine250.com/">Salt & Pine</a> (really good by the way!) and planned where to get coffee and put up a tent, under which to continue my "fun". This would have been baby's first script in python, but I had decided earlier to use common lisp.
 </p>
 <p>
-    My girlfriend is into lame jokes, childish contradictions...the sort of jokes you see in facebook "meme's" or silly youtube vids. I'd say, "What's up", to which she'd reply, "What's down." I came up with one which gave me a chuckle walking on my way to coffee..."rare lisp." Later that day, she gave me her own version:
+    My girlfriend is into lame jokes, childish contradictions…the sort of jokes you see in facebook "meme's" or silly youtube vids. I'd say, "What's up", to which she'd reply, "What's down." I came up with one which gave me a chuckle walking on my way to coffee—"rare lisp." Later that day, she gave me her own version:
 </p>
 <h2>"Uncommon Lisp"</h2>
 <p>
-I remember learning javascript, at first, it felt so unnatural compared to my old C++ or python...still, there might be a converse to that old exhortation--another invented adage of some kind!: "don't confuse familiarity with ease of use." </p>
+I remember learning javascript, at first, it felt so unnatural compared to my old C++ or python...still, there might be a converse to that old exhortation (another invented adage of some kind!): "don't confuse familiarity with ease of use." </p>
 <p>
 Common lisp currently feels that way. It has a rather different syntax from the C-flavored coding most of us are used to. It'sunfamiliar, thus difficult, but I know better than to call it difficult. Still, starting my programming spree, I'm enthusiastic! Thinking back to a few months ago, the "list" part of lisp got me excited first, since I do almost everything with list comprehensions, and now that I hack in javascript more naturally, a lot of my code looks like
 <pre>var val=somearrayreturningf().map(
     (c) => mapped(c)
 ).reduce(
     (p,c)=>reducer(p,c)
-, initialvalue)
+, initialvalue);
 </pre>
 and so on and so forth. I was excited because I was finally going to hack in the tongue where list-hacking originated! I mean, who hasn't read Paul Graham's extoling the virtues of Lisp, or that old (actual) adage of <a href="https://en.wikipedia.org/wiki/Greenspun's_tenth_rule">Greenspun</a> "Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp." I was finally going to touch the hem of God, to handle the reigns only reserved for the experience, to speak in the tongue of the greats, common lisp!
 </p>
@@ -51,10 +51,10 @@ where now, you read <em>"bottom-up"</em>. This gets more difficult (for my non-l
     Okay, okay, I'm sure something does exist out there. Plus, parsing dates <em>right</em> is tricky when you have to worry about internationalization and different formats or whatever. But, for me, to implement a US-ish date parser again, in 2015, for a language and ecosystem that is 30+ years old, really?
 </p>
 <p>
-No problem, I did it, and it works for now...thank god for regex. Still, the idea that I had a full featured regex library and a time library like local-time but no date parser boggles the mind.
+No problem, I did it, and it works for now…thank god for regex. Still, the idea that I had a full featured regex library and a time library like local-time but no date parser boggles the mind.
 </p>
 <p>
-    So, I hacked up the date parser and regexes for it, and testing it was okay, until linedit for sbcl was funking up. <a href="https://common-lisp.net/project/linedit/">Linedit</a> is a library which gives <a href="http://www.sbcl.org/">sbcl</a>, a popular interpreter for lisp, a readline-like experience. It does this thing where it erases characters towards the start of the line as you type. It did this before, but in the heat of rapid-repl'ing, little quirks get really annoying. So, I stopped and googled linedit. Finding their webpage, I clicked on the link that said "git" in it. At the time, I couldn't load it, but looking at it now, the last update to their git repos was <a href="https://gitlab.common-lisp.net/linedit/linedit/commit/dc616acb316f6a8da6cc829eef23f0e5833e5a89">6 months ago</a>. Curious, I searched up other tools I use...6 months was common, a few hadn't been touched in years.
+    So, I hacked up the date parser and regexes for it, and testing it was okay, until linedit for sbcl was funking up. <a href="https://common-lisp.net/project/linedit/">Linedit</a> is a library which gives <a href="http://www.sbcl.org/">sbcl</a>, a popular interpreter for lisp, a readline-like experience. It does this thing where it erases characters towards the start of the line as you type. It did this before, but in the heat of rapid-repl'ing, little quirks get really annoying. So, I stopped and googled linedit. Finding their webpage, I clicked on the link that said "git" in it. At the time, I couldn't load it, but looking at it now, the last update to their git repos was <a href="https://gitlab.common-lisp.net/linedit/linedit/commit/dc616acb316f6a8da6cc829eef23f0e5833e5a89">six months ago</a>. Curious, I searched up other tools I use…6 months was common, a few hadn't been touched in years.
 </p>
 <p>
     Exasperated, I googled the text "is common lisp dead." I found the following <a href="http://qr.ae/RbAW3U">Quora answer</a> to an <a href="http://qr.ae/RbAWBq">almost related question</a>:
