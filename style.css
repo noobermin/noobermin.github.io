@@ -261,12 +261,17 @@ li:before{
 	font-size: 1.5em;
 	color: #bb1;
 }
-#content blockquote{
+#content blockquote:not([class]){
 	text-align: justify;
 	font-size: 1em;
-  color: #556;
-	text-shadow: none;
+  color: #555;
+	background: #dff;
+	padding: 1em 2em;
+	margin: auto 0em;
+	border-radius: 5px 5px 5px 5px;
 }
+
+
 
 #content div#springnotes{
 }
