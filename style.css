@@ -255,13 +255,13 @@ li:before{
 	color: rgb(0,200,200);
 }
 
-#content blockquote{
+#content blockquote.oneline{
 	text-align: center;
 	text-shadow: 0px 1px 1px #ccc;
 	font-size: 1.5em;
 	color: #bb1;
 }
-#content blockquote.long{
+#content blockquote{
 	text-align: justify;
 	font-size: 1em;
   color: #556;
