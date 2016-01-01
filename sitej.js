@@ -11,8 +11,8 @@ function refresh() {
         $byid("top").addclass("shown");
     } else if (section.match(/^words/) || section.match(/^work/)) {
         $byid("hr").addclass("hidden");
-    } else if ($byid(section)){
-        if ($byq("#words #"+section)) {
+    } else if (byid(section)){
+        if (byq("#words #"+section)) {
             window.location.href="#words";
             $byid("hr").addclass("hidden");
             var href = $byid(section).attr("href");
