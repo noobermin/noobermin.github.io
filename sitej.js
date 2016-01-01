@@ -14,6 +14,7 @@ function refresh() {
     } else if ($byid(section)){
         if ($byq("#words #"+section)) {
             window.location.href="#words";
+            $byid("hr").addclass("hidden");
             var href = $byid(section).attr("href");
             loadcontent(href, true);
             /*setTimeout(function(){
