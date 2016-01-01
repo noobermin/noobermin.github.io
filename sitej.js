@@ -16,7 +16,7 @@ function refresh() {
             window.location.href="#words";
             var href = $byid(section).attr("href");
             setTimeout(function(){
-                window.location.href="#"+href;
+                window.location.href="#"+section;
                 $byid("hr").addclass("hidden");
                 loadcontent(href, true);
             }, 500);
