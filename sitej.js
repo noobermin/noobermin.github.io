@@ -14,9 +14,11 @@ function refresh() {
     } else if ($byid(section)){
         if ($byq("#words #"+section)) {
             window.location.href="#words";
+            var href = $byid(section).attr("href");
             setTimeout(function(){
+                window.location.href="#"+href;
                 $byid("hr").addclass("hidden");
-                loadcontent($byid(section).attr("href"), true);
+                loadcontent(href, true);
             }, 500);
         }
     }
