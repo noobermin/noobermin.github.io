@@ -15,11 +15,12 @@ function refresh() {
         if ($byq("#words #"+section)) {
             window.location.href="#words";
             var href = $byid(section).attr("href");
-            setTimeout(function(){
+            loadcontent(href, true);
+            /*setTimeout(function(){
                 window.location.href="#"+section;
                 $byid("hr").addclass("hidden");
                 loadcontent(href, true);
-            }, 500);
+            }, 500);*/
         }
     }
 }
