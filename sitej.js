@@ -23,6 +23,8 @@ function refresh() {
                 loadcontent(href, true);
             }, 500);*/
         }
+    } else {
+        $byid("top").addclass("shown");
     }
 }
 function getwordstags(){
