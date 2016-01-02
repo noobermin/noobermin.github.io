@@ -64,14 +64,6 @@ function init() {
 }
 
 
-function words() {
-    $byq("nav").prune();
-    $byid("content").prune().rmclass("shown");
-    $byid("sidenav").addclass("shown");
-    $byid("hr").addclass("hidden");
-    console.log("I am ever called");
-}
-
 function getfile(url, f){
     request(
         url,"","GET",
@@ -85,8 +77,7 @@ function loadcontent(url,instagram) {
 }
 
 function writecontent(text,instagram) {
-    var content = $byid("content");
-    content.inner(
+    $byid("content").inner(
 	    text
     ).append(
 	    $mkel(
