@@ -38,7 +38,7 @@
 (defvar *us-date-partsrx* "([A-Za-z.]*) *([0-9]{1,2}),{0,1} *([0-9]{1,4})")
 (defparameter *months-rx*
   ($maps
-   '("January" "Febuary" "March" "April" "June" "July"
+   '("January" "Febuary" "March" "April" "May" "June" "July"
      "August"  "September" "October" "November" "December")
    (lambda (s)
      (strcat
@@ -55,7 +55,7 @@
 (defun datestr-to-date (s)
   (let ((date (getmatches *us-date-partsrx* s)))
     (if (eq date '())
-        (error "invalid date"))
+      (error (strcat "invalid date " s)))
     (list
      (parse-integer (elt date 1)); day
      (month-to-num  (elt date 0)); month

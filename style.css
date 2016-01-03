@@ -82,7 +82,7 @@ a {
 	text-decoration: none;
 }
 
-a[href]:not([href^="#"]):not([href=""]):hover:before{
+#content a[href]:not([href^="#"]):not([href=""]):hover:before{
   content: "➲ " attr(href);
 	font-size: medium;
 	position: absolute;

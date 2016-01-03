@@ -1,10 +1,6 @@
 importinto($dom);
 importinto(dom);
-function $mklink(id,text,url) {
-    var r = $mkel("a",{id:id},"",text);
-    url && r.attr("href",url);
-    return r;
-}
+
 function refresh() {
     console.log("refreshing...");
     $byq("nav").rmclass("shown");
@@ -15,6 +11,20 @@ function refresh() {
         $byid("top").addclass("shown");
     } else if (section.match(/^words/) || section.match(/^work/)) {
         $byid("hr").addclass("hidden");
+    } else if (byid(section)){
+        if (byq("#words #"+section)) {
+            window.location.href="#words";
+            $byid("hr").addclass("hidden");
+            var href = $byid(section).attr("href");
+            loadcontent(href, true);
+            /*setTimeout(function(){
+                window.location.href="#"+section;
+                $byid("hr").addclass("hidden");
+                loadcontent(href, true);
+            }, 500);*/
+        }
+    } else {
+        $byid("top").addclass("shown");
     }
 }
 function getwordstags(){
@@ -26,8 +36,9 @@ function getwordstags(){
 function firsthacks(){
     $byqs("#words li a").forEach(function(c){
         var href = c.attr("href");
-        c.attr("href","").evlis("click",function(e){
+        c.evlis("click",function(e){
             e.preventDefault();
+            e.stopPropagation();
             loadcontent(href,true);//for now, just enable embeds because I'm tired of hacking on this.
         })
     });
@@ -35,6 +46,7 @@ function firsthacks(){
 function init() {
     firsthacks();
     refresh();
+    //is this still needed
     $byq("nav").evlis(
 	    "click", function(e) {
             var div;
@@ -49,32 +61,8 @@ function init() {
             }
         }
     );
-    return;
-    /* fix this.
-    var section=document.URL.split("#")[1];
-    
-    if (section) {
-	    if (section.match(/^words--.)) {
-	        section = section.replace(/^words--/,"");
-	        var el = $byid(section);
-	        if (el.el) {
-		        words();
-		        el.el.onclick();
-	        }
-	    } else {
-	        console.log("incorrect link \""+section+"\"");
-	    }
-    }
-    */
 }
 
-
-function words() {
-    $byq("nav").prune();
-    $byid("content").prune().rmclass("shown");
-    $byid("sidenav").addclass("shown");
-    $byid("hr").addclass("hidden");
-}
 
 function getfile(url, f){
     request(
@@ -89,8 +77,7 @@ function loadcontent(url,instagram) {
 }
 
 function writecontent(text,instagram) {
-    var content = $byid("content");
-    content.inner(
+    $byid("content").inner(
 	    text
     ).append(
 	    $mkel(
