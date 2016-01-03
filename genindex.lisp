@@ -147,6 +147,7 @@
 	<link href='m.css' media='(max-width: 700px)' rel='stylesheet'  type='text/css' />
 	<script src='jss/htm.js'></script>
 	<script src='jss/ani.js'></script>
+	<script src='jss/xhr.js'></script>
 	<script src='sitej.js'></script>
     <script async defer src='http://platform.instagram.com/en_US/embeds.js'></script>
 </head>")
