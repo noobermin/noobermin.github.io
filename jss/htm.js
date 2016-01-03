@@ -5,26 +5,107 @@ function importinto(ns, targetns) {
     }
 }
 var $dom={};
+var obj = (function(){
+    var lib = {
+        has:function(o){
+            if(!o) return;
+            return array.slice(arguments,1).map(function(c){
+                return o[c] !== undefined;
+            }).reduce(function(p,c){
+                return p && c;
+            },true);
+        },
+        //for reading out particular elements
+        //of an object, meant for options sent to a function.
+        //Only is really useful with es6 destructuring
+        readout:function(o){
+            if(!o) return;
+            //obviously only works for a single depth
+            return array.map(arguments,function(c){
+                return o[c];
+            });
+        },
+        cat:function(o,d){
+            if(!o)return d;
+            for (i in d){
+                o[i] = d[i];
+            }
+            return o;
+        },
+        add:function(o,l,d){//I'm 26 this year, fitting.
+            if(!o) return {l:d};
+            o[l]=d;
+            return o;
+        },
+        take:function(d){
+            var o={};
+            slice(arguments,2).forEach(function(c){
+                if(d[c]) o[c] = d[c];
+            });
+            return o;
+        },
+        choice:function(o,l,e){
+            return o && o[l] ? o[l] : e;
+        }
+    };
+    return lib;
+})();
 
-function objhas(o,a){if(o) return o[a];}
+var helpers = {
+    other_args:function(a) {
+        return Array.isArray(a[1]) ? a[1] : array.slice(a,1);
+    }
+};
+
+//hack that is better than date objects for me.
+var timems = (function(){
+    var lib={};
+    function mktime(ms){
+        var d = new Date(ms);
+        var e = new Date(0);
+        function getparam(pname){
+            var methname='getUTC'+pname;
+            return d[methname]()-e[methname]();
+        }
+        var ret = {};
+        [
+            ['yr','FullYear'],
+            ['mon','Month'],
+            ['day','Day'],
+            ['hr','Hours'],
+            ['min','Minutes'],
+            ['sec','Seconds'],
+            ['ms','Milliseconds']
+        ].forEach(function(c){
+            ret[c[0]] = getparam(c[1]);
+            ret[c[1]] = getparam(c[1]);
+        });
+        return ret;
+    }
+    lib.mktime=mktime;
+    return lib;
+})();
 
 var array = (function(){
-    function mkarraycall(callname) {
-        return Array.prototype[callname].call.bind(Array.prototype[callname]);
-    }
-    var concat = mkarraycall("concat"),
-        slice = mkarraycall("slice");
+    function mkarraycall(callname){
+        return Array.prototype[
+            callname
+        ].call.bind(Array.prototype[callname]);}
     var ret = {
-        map:mkarraycall("map"),
+        map:   mkarraycall("map"),
         filter:mkarraycall("filter"),
-        concat:concat,
+        concat:mkarraycall("concat"),
         reduce:mkarraycall("reduce"),
-        slice:slice,
+        slice: mkarraycall("slice"),
         concatv:function(arraylike,lists) {
             return concat.apply(concat,concat([arraylike],lists));
         },
         //convience functions
-        has: function(arraylike,ino){return filter(arraylike,function(c){return c == ino}).length > 0;},
+        has: function(arraylike,ino){
+            return filter(
+                arraylike,
+                function(c){return c == ino}
+            ).length > 0;},
         last:function(arraylike){ return arraylike[arraylike.length-1]; },
         setlast: function(arraylike,d){ arraylike[arraylike.length-1]=d; },
         findfirst: function(arraylike, func) {
@@ -159,7 +240,6 @@ var dom = (function(){
             c[n] = v;
         });
     }
-    
     function mk(el,attr,classes,html){
         if (attr) for (prop in attr)
 	        el.setAttributeNS(null,prop,attr[prop]);
@@ -180,12 +260,8 @@ var dom = (function(){
     };
     importinto(create, ret);
     exportv(create,"create");
-
     
-    function other_args(a){
-        return Array.isArray(a[1]) ? a[1] : arr.slice(a,1);
-    }
-
+    var other_args = helpers.other_args;
     var modify={
         append: function(el) {
             el = $dom.$toel(el);
@@ -235,7 +311,8 @@ var dom = (function(){
         },
         evliss: function() {
             for(var i=1; i< arguments.length; i+=2)
-	            modify.evlis(arguments[0], arguments[i], arguments[i+1],false);
+	            modify.evlis(arguments[0], arguments[i],
+                             arguments[i+1],false);
             return arguments[0];
         },
         insert_after: function(el, before) {
@@ -278,6 +355,12 @@ var dom = (function(){
 	            }
             }
         },
+        rmevlis: function(el, type, f, c){
+            el = $dom.$toel(el);
+            (typeof c==="undefined") && (c=true);
+            el.removeEventListener(type,f,c);
+            return el;
+        },
         inner: function(el,innert) {
             el = $dom.$toel(el);
             if(!innert) return el.innerHTML;
@@ -298,7 +381,7 @@ var dom = (function(){
             el = $dom.$toel(el);
             if( arguments.length == 2) return el[arguments[1]];
             else for(var i=1; i < arguments.length; i+=2) {
-	            el.setAttribute(arguments[i],arguments[i+1]);
+	            el[arguments[i]]=arguments[i+1];
             }
             return el;
         },
@@ -333,7 +416,7 @@ $dom = (function(){
             c[n] = v;
         });
     }
-
+    
     //
     //my super element wrapper type
     //
@@ -384,56 +467,9 @@ $dom = (function(){
     return ret;
 })();
 
-//xmlhttprequest
-function mkxhr(){
-    if (window.XMLHttpRequest){ return new XMLHttpRequest();}
-    else if (window.ActiveXObject) {
-	    var ret=null;
-	    try { ret = new ActiveXObject("Msxml2.XMLHTTP");}
-	    catch (e) {
-	        try { ret = new ActiveXObject("Microsoft.XMLHTTP");}
-	        catch(e){}
-	    }
-	    return ret;
-    }
-    return null;
-}
-//my fetch-like.
-function request(to,message,method, opts){
-    var xhr = mkxhr();
-    !method && (method = "GET");
-    xhr.open(method,to);
-    var contenttype = opts && opts.contenttype ?
-                       opts.contenttype :
-                       'application/x-www-from-urlencoded';
-    xhr.setRequestHeader('Content-type', contenttype);
-    if(opts && opts.overrideMimeType){
-        xhr.overrideMimeType(opts.overrideMimeType);
-    }
-    try{ xhr.send(message); } catch (e){console.log("error caught in send: %o",e)}
-    xhr._callbacks = [];
-    xhr.onreadystatechange = function(){
-        if (xhr.readyState === 4) {
-            xhr._callbacks.forEach(function(f){
-                f(xhr.response, xhr.responseType, xhr.status);
-            });
-        }
-    };
-    xhr.then = function(f) {
-        xhr._callbacks.push(f);
-        return xhr;
-    };
-    xhr.on = function(status, f){
-        xhr._callbacks.push(function(a,b,c){
-            if(xhr.status === status)f(a,b,c);
-        });
-        return xhr;
-    };
-    return xhr;
-}
-
 //exporting node stuff
 if(typeof exports !== 'undefined') {
     exports.array = array;
     exports.importinto = importinto;
+    exports.obj = obj;
 }
