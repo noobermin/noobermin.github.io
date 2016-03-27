@@ -8,6 +8,10 @@
   ($foreach l #'import))
 (defun spit (a)
   (format t "~a~%" a))
+
+;;jebus
+(defun aget (l d)
+  (cdr (assoc l d)))
 (defmacro $mapsr (l &rest fs)
   (if (= (length fs) 0)
       l
@@ -15,11 +19,35 @@
 (defmacro $maps (l &rest fs)
   `($mapsr ,l ,@(reverse fs)))
 
-(requires 'cl-ppcre 'local-time)
+(requires 'cl-ppcre 'local-time 'cl-interpol)
+(imports 'cl-ppcre:scan-to-strings 'cl-ppcre:split 'cl-ppcre:scan
+         'cl-ppcre:regex-replace 'cl-ppcre:regex-replace-all)
 
-(imports 'cl-ppcre:scan-to-strings 'cl-ppcre:split 'cl-ppcre:scan)
+(cl-interpol:enable-interpol-syntax)
+ 
+
+;;string manipulation
 (defmacro strcat (&rest s)
   `(concatenate 'string ,@s))
+(defun strrep (s r)
+  (cond
+    ((< r 1) "")
+    ((= r 1) s)
+    (T
+     (concatenate 'string s (strrep s (- r 1))))))
+(defun indent (s &optional (depth 1))
+  (let* ((indents (strrep "  " depth)) (ret ()))
+    (setq ret
+          (regex-replace-all
+           #?"\n"
+           ;;replaces the first line with an indentation
+           (regex-replace "^" s indents)
+           (strcat #?"\n" indents)))
+    (regex-replace #?"${indents}$" ret "")))
+(defun strip (s)
+  (regex-replace #?"\n$" s ""))
+
+
 (defun getmatch (r l)
   (multiple-value-bind (_ val) (scan-to-strings r l)
     (if val (elt val 0) val)))
@@ -68,57 +96,60 @@
   (local-time:timestamp-to-unix
    (datestr-to-timestamp s)))
 
-;; the shits
+;; the shits  
 (defun genwords()
-  (let*
-      ((ret "")
-       (pairs
-        ($maps
-         (directory "words/*.htm")
-         (lambda (f) ; first, extra meta data
-           (let* ((text (file-read-full f)))
-             (list
-              (getmatch *urlrx* (namestring f))
-              (getmatch *titlerx* text)
-              (getmatch *daterx* text)
-              (getmatch *keywordsrx* text))))
-         (lambda (i) ;and getting the id
-           (destructuring-bind (url title date kw) i
-             (list
-              (getmatch "words/(.*)\.htm" url)
-              url title date kw)))
-         (lambda (i) ;making keywords into tags
-           (destructuring-bind (id url title date kw) i
-             (list
-              id url title date
-              (reduce (lambda (a b) (strcat a b))
-                      (mapcar (lambda (l) (strcat "<span class='wordstag'>"
-                                                  l "</span>"))
-                              (split ", *" kw))))))
-         (lambda (i) ;adding date info
-           (destructuring-bind (id url title date kw) i
-             (list
-              id url title date kw
-              (datestr-to-unix date)))))))
+  (let* ((words "") (pairs (directory "words/*.htm")))
+    (setq pairs
+          ($maps pairs
+                 (lambda (f) ; first, extra meta data
+                   (let* ((text (file-read-full f)))
+                     (pairlis
+                      '(url title date kw)
+                      (list (getmatch *urlrx* (namestring f))
+                            (getmatch *titlerx* text)
+                            (getmatch *daterx* text)
+                            (getmatch *keywordsrx* text)))))
+                 (lambda (d) ;and getting the id
+                   (acons 'id (getmatch "words/(.*)\.htm"
+                                        (aget 'url d)) d))
+                 (lambda (d) ;making keywords into tags
+                   (let (kw-str)
+                     (setq kw-str (reduce
+                                   (lambda (a b) (strcat a b))
+                                   (mapcar (lambda (l)
+                                             #?"<span class='wordstag'>${l}</span>\n")
+                                           (split ", *" (aget 'kw d)))))
+                     (setq kw-str (strip kw-str))
+                     (acons 'kw kw-str d)))
+                 (lambda (d) ;adding date info
+                   (acons 'unix (datestr-to-unix (aget 'date d)) d))))
     ;;sort by unix time
     (setq pairs (sort pairs #'>
-                      :key(lambda (i) (elt i 5))))
-    (setq ret (reduce (lambda (a b) (strcat a b))
-            ($maps
-             pairs
-             (lambda (i)
-               (destructuring-bind (id url title date kw unix) i
-                 (strcat "<li>
-  <a id='" id "' href='" url "'>" title "</a>
-  <time>" date "</time>
-  " kw "
+                      :key(lambda (i) (aget 'unix i))))
+    (setq words
+          (reduce
+           (lambda (a b) (strcat a b))
+           ($maps
+            pairs
+            (lambda (i)
+              (flet ((d (l) (aget l i)))
+                (strcat
+#?"<li>
+  <a id='${(d 'id)}' href='${(d 'url)}'> ${(d 'title)} </a>
+  <time>${(d 'date)}</time>
+${(indent (d 'kw))}
 </li>
 "))))))
-  (strcat "<div id='words'>
-<h2>words</h2>
-<ul>
-" ret "</ul>
-</div>")))
+    (setq words (strip words))
+    ;;last form
+#?"<div id='words'>
+  <h2>words</h2>
+  <ul>
+${(indent words 1)}
+  </ul>
+</div>
+"))
+
 (defun genwork ()
   ;;right now, just give the static shit, update this!
 "<div id='work'>
@@ -137,23 +168,25 @@
 
 (defvar *html-head*
 "<head>
-	<title>noobermin</title>
-	<meta name='viewport' content='width=device-width, initial-scale=1'>
-	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-    <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Average' rel='stylesheet' type='text/css'>
-	<link href='style.css' rel='stylesheet' type='text/css'/>
-	<link href='pc.css' media='(min-width: 700px)' rel='stylesheet'  type='text/css' />
-	<link href='m.css' media='(max-width: 700px)' rel='stylesheet'  type='text/css' />
-	<script src='jss/htm.js'></script>
-	<script src='jss/ani.js'></script>
-	<script src='jss/xhr.js'></script>
-	<script src='sitej.js'></script>
-    <script async defer src='http://platform.instagram.com/en_US/embeds.js'></script>
-</head>")
+  <title>noobermin</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+  <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Average' rel='stylesheet' type='text/css'>
+  <link href='style.css' rel='stylesheet' type='text/css'/>
+  <link href='pc.css' media='(min-width: 700px)' rel='stylesheet'  type='text/css' />
+  <link href='m.css' media='(max-width: 700px)' rel='stylesheet'  type='text/css' />
+  <script src='jss/htm.js'></script>
+  <script src='jss/ani.js'></script>
+  <script src='jss/xhr.js'></script>
+  <script src='sitej.js'></script>
+  <script async defer src='http://platform.instagram.com/en_US/embeds.js'></script>
+</head>
+")
 (defvar *html-body-title*
 "<div id=\"noobermin\" onclick=\"window.location.href='';\">noobermin</div>
-<hr id='hr'/>")
+<hr id='hr'/>
+")
 (defvar *html-body-topnav*
 "<nav id='topnav'>
   <div id='top'>
@@ -168,18 +201,27 @@
    </div>
 </nav>")
 (defvar *html-body-sidenav*
-  (strcat "<nav id='sidenav'>" (genwords) (genwork) "</nav>"))
+  (strcat #?"<nav id='sidenav'>\n"
+          (indent (genwords))
+          (indent (genwork))
+          #?"</nav>\n"))
 
-(defvar *html-main* (strcat
-"<div id='main'>
-" *html-body-sidenav* "
-<div id='content'></div>
-</div>"))
+(defvar *html-main*
+  (strcat #?"<div id='main'>\n"
+          #?"  <div id='content'></div>\n</div>\n"
+          *html-body-sidenav*))
+          
 
-(spit (strcat "<!DOCTYPE html>
-<html>" *html-head* "
-<body>
-" *html-body-title* *html-body-topnav* *html-main* "
-<script>window.onload=init;</script>
-</body>
-</html>"))
+(defvar *index*
+  (strcat
+   #?"<!DOCTYPE html>\n<html>\n"
+   *html-head*
+   #?"<body>\n"
+   (indent *html-body-title*)
+   (indent *html-main*)
+   (indent *html-body-topnav*)
+   (indent #?"\n<script>window.onload=init;</script>")
+   #?"</body>\n<\html>"))
+(with-open-file (stream "index.htm"
+                        :direction :output :if-exists :overwrite)
+  (format stream *index*))

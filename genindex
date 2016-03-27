@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-./genindex.lisp > index.htm
+./genindex.lisp
