@@ -2,35 +2,20 @@ importinto($dom);
 importinto(dom);
 importinto(ani);
 
-var words = words || null;
-var me = me || null;
-
-function restore_top(){
-    if (hasclass($byid("top"),"shown")) return;
-    $byid("top").rmclass("minimized").addclass("shown");
-    words.hide();
-    me.hide();
-}
-
+var page = page || null;
 
 function refresh() {
     console.log("refreshing...");
-    $byq("nav").rmclass("shown");
-    $byid("content").rmclass("shown");
+    page.landing();
     var section=document.URL.split("#")[1];
     if (!section) {
-        restore_top();
+        return;
     } else if (section.match(/^words/)){
-        words.show();
+        page.words();
     } else if (section.match(/^me/)){
-        me.show();
+        page.me();
     } else {
-        words.load(section);
-        /*setTimeout(function(){
-           window.location.href="#"+section;
-           $byid("hr").addclass("hidden");
-           loadcontent(href, true);
-           }, 500);*/
+        page.load(section);
     }
 }
 
@@ -42,18 +27,10 @@ function getwordstags(){
   enabled browsers*/
 function firsthacks(){
     $byqs("#words li a").forEach(function(c){
-        var href = c.attr("href");
         c.evlis("click",function(e){
             e.preventDefault();
             e.stopPropagation();
-            succ(
-                  0,function(){
-                    $byq("#words").addclass("transitout");},
-                300,function(){
-                    //for now, just enable embeds because I'm tired of hacking on this.
-                    $byq("#words").rmclass("shown","transitout");
-                    loadcontent(href,true);
-                });
+            page.load(idof(c));
         })
     });
 }
@@ -62,61 +39,114 @@ function open(){
 }
 function init() {
     firsthacks();
-    words=(function(_i){
-        if (_i) return;
-        var words = $byid("words");
-        var main  = $byid("main");
-        words.show = function(){
-            words.addclass("shown");
-            main.addclass("shown");
-        }
-        words.hide = function(){
-            words.rmclass("shown");
-            main.rmclass("shown");
-        }
-        words.load = function(id){
-            if (byq("#words #"+id)) {
-                window.location.href="#words";//will call words.show()
-                var href = $byid(id).attr("href");
-                loadcontent(href, true);
+
+    //model
+    page=(function(){
+        var words,me,top,
+            content;
+        var main = $byid("main");
+        content = $byid("content");
+        words=(function(_i){
+            if (_i) return;
+            var words = $byid("words");
+            words.show = function(){
+                words.addclass("shown");
+                main.addclass("shown");
             }
-        }
-        return words;
-    })(words);
-    
-    me = (function(_i){
-        var me = $byid("me");
-        me.show = function(){
-            me.addclass("shown");
-        }
-        me.hide = function(){
-            me.rmclass("shown");
-        }
-        return me;
-    })(me);
-    
-    refresh();
-    //is this still needed
-    var top  = $byid("top");
-    $byq("#wordslink").evlis(
-        'click',function(e){
-            if (hasclass(top,"shown")) {
-                top.rmclass("shown").addclass("minimized");
-                words.show();
-            } else if ($byid("content").hasclass("shown")){
-                window.location.href="#words";
-            } else if (top.hasclass("minimized")) {
-                restore_top();
+            words.hide = function(){
+                words.rmclass("shown");
+                main.rmclass("shown");
             }
-        });
-    $byq("#melink").evlis('click',function(e){
-        if(hasclass(top,"shown")) {
+            words.load = function(id){
+                if (byq("#words #"+id)) {
+                    var href = $byid(id).attr("href");
+                    loadcontent(href, true);
+                    return true;
+                }
+            }
+            return words;
+        })(words);
+        me = (function(_i){
+            var me = $byid("me");
+            me.show = function(){
+                me.addclass("shown");
+            }
+            me.hide = function(){
+                me.rmclass("shown");
+            }
+            return me;
+        })(me);
+        function restore_top(){
+            if (hasclass($byid("top"),"shown")) return;
+            $byid("top").rmclass("minimized").addclass("shown");
+            words.hide();
+            me.hide();
+        };
+
+        var top  = $byid("top");
+        var ret = {};
+        function unload(){
+            content.rmclass("shown");
+        }
+        ret.words = function(){
+            if (page.state === "wordsarticle") unload();
+            top.rmclass("shown").addclass("minimized");
+            words.show();
+            page.state = "words";
+        };
+        ret.me = function(){
+            if (page.state === "wordsarticle") unload();
             top.rmclass("shown").addclass("minimized");
             me.show();
-        } else if ($byid("content").hasclass("shown")){
-            window.location.href="#words";
-        } else if (hasclass(top,"minimized")) {
-            restore_top(); }});
+            page.state = "me";
+        };
+        ret.landing=function(){
+            page.state = "landing";
+            words.hide();
+            me.hide();
+            content.rmclass("shown");
+            restore_top();
+        };
+        ret.load = function(id){
+            if (!words.load(id)) return;
+            if (page.state === "words") {
+                succ(
+                    0,function(){
+                        $byq("#words").addclass("transitout");},
+                    300,function(){
+                        $byq("#words").rmclass("shown","transitout");
+                        content.addclass("shown");
+                    });
+            } else {
+                main.addclass("shown");
+                top.rmclass("shown").addclass("minimized");
+                content.addclass("shown");
+            }
+            page.state="wordsarticle";
+        };
+        return ret;
+    })();
+    refresh();
+    //is this still needed
+    //control
+    $byq("#wordslink").evlis('click',function(e){
+        switch(page.state) {
+            case "words":
+                page.landing();
+                break;
+            default:
+                page.words();
+        }    
+    });
+    $byq("#melink").evlis('click',function(e){
+        switch(page.state) {
+            case "me":
+                page.landing();
+                break;
+            default:
+                page.me();
+        }
+    });
 }
 
 
@@ -143,8 +173,6 @@ function writecontent(text,instagram) {
                 $byid("content").prune().rmclass("shown");
             }
 	    )
-    ).addclass(
-	    "shown"
     );
     if (instagram) {
         instgrm.Embeds.process();
