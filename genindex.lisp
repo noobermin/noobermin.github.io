@@ -171,45 +171,42 @@ ${(indent words 1)}
   <title>noobermin</title>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-  <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Average' rel='stylesheet' type='text/css'>
   <link href='style.css' rel='stylesheet' type='text/css'/>
-  <link href='pc.css' media='(min-width: 700px)' rel='stylesheet'  type='text/css' />
-  <link href='m.css' media='(max-width: 700px)' rel='stylesheet'  type='text/css' />
   <script src='jss/htm.js'></script>
   <script src='jss/ani.js'></script>
   <script src='jss/xhr.js'></script>
-  <script src='sitej.js'></script>
+  <script src='site.js'></script>
   <script async defer src='http://platform.instagram.com/en_US/embeds.js'></script>
 </head>
 ")
 (defvar *html-body-title*
-"<div id=\"noobermin\" onclick=\"window.location.href='';\">noobermin</div>
-<hr id='hr'/>
-")
+#?"<div id='noobermin' onclick='window.location.href=\"\";'>noobermin</div>\n")
 (defvar *html-body-topnav*
 "<nav id='topnav'>
   <div id='top'>
-    <a id='melink' href='#me'>me.</a>
-    <a id='worklink' href='#work'>work.</a>
-    <a id='wordslink' href='#words'>words.</a>
+    <a id='melink' href='#me'>me</a>
+    <!--<a id='worklink' href='#work'>work</a>-->
+    <a id='wordslink' href='#words'>words</a>
   </div>
   <div id='me'>
     <a id='1' href='http://github.com/noobermin'>1/</a>
     <a id='2' href='http://instagram.com/windywalk'>2/</a>
     <a id='3' href='http://twitter.com/noobermin'>3/</a>
    </div>
-</nav>")
+</nav>
+")
 (defvar *html-body-sidenav*
   (strcat #?"<nav id='sidenav'>\n"
           (indent (genwords))
-          (indent (genwork))
+          ;;(indent (genwork))
           #?"</nav>\n"))
 
 (defvar *html-main*
   (strcat #?"<div id='main'>\n"
-          #?"  <div id='content'></div>\n</div>\n"
-          *html-body-sidenav*))
+          #?"  <div id='content'></div>\n"
+          (indent *html-body-sidenav*)
+          #?"</div>\n"))
           
 
 (defvar *index*
@@ -219,9 +216,10 @@ ${(indent words 1)}
    #?"<body>\n"
    (indent *html-body-title*)
    (indent *html-main*)
+   (indent #?"<hr id='hr'/>\n")
    (indent *html-body-topnav*)
-   (indent #?"\n<script>window.onload=init;</script>")
-   #?"</body>\n<\html>"))
+   (indent #?"\n<script>window.onload=init;</script>\n")
+   #?"</body>\n</html>"))
 (with-open-file (stream "index.htm"
-                        :direction :output :if-exists :overwrite)
-  (format stream *index*))
+                        :direction :output :if-exists :supersede)
+  (write-sequence *index* stream))

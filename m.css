@@ -1,34 +1,5 @@
-#noobermin {
-  font-size: 4.0em;
-}
-#topnav a{
-  font-size: 2.0em;
-}
-#sidenav.shown {
-  
-}
 
-.img-sq{
-	width: 250px; 
-	height: 250px;
-}
 
-#content.shown {
-  left: 1%;
-  width: 88%;
-}
 
-#content .content-x{
-  position: absolute;
-	font-weight: bold;
-	text-shadow: 1px 1px 3px #444;
-	border-radius: 1em;
-	z-index: 20;
-  display: block;
-  color: #233;
-	font-size: 4em;
-	top: -0.2%;
-	right: -3%;
-	cursor: pointer;
-	font-family: Veranda;
-}
+
+
