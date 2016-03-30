@@ -284,24 +284,23 @@ li:before{
 
 #content p:last-of-type:after{
 	content:" ☐";
-	color: rgb(0,190,190);
+	color: rgb(0,160,200);
 	text-shadow: 0px 1px 1px #ccc;
 }
 #content.shown h1{
 	text-align: center;
-	color: rgb(0,190,190);
-	text-shadow: 0px 1px 1px #ccc;
+	color: rgb(0,160,200);
+	text-shadow: 0px 1.5px 2px #bbb;
 	margin-top: 1em;
 	margin-bottom: 0.1em;
 }
-#content.shown header span{
-	color: rgb(100,190,190);
+#content.shown header{
+	color: rgb(0,150,180);
 }
 #content.shown header time{
 	display: block;
 	text-align: center;
 	font-size: x-small;
-	color: rgb(100,190,190);
 }
 #content.shown header time:before{
 	content: "✎ "
@@ -317,7 +316,7 @@ text-align: center;
 }
 
 #content.shown h2{
-	color: rgb(0,200,200);
+	color: rgb(0,160,200);
 	text-shadow: 0px 1px 1px #ccc;
 	font-family: "Georgia";
 	text-align: center;
@@ -326,7 +325,7 @@ text-align: center;
 }
 
 #content.shown a{
-	color: rgb(0,200,200);
+	color: rgb(0,160,200);
 }
 
 #content blockquote.oneline{
@@ -338,10 +337,10 @@ text-align: center;
 #content blockquote:not([class]){
 	text-align: justify;
 	font-size: 1em;
-  color: #555;
-	background: #dff;
-	padding: 1em 2em;
+  color: #121;
+	background: rgb(190,230,245);
 	margin: auto 0em;
+	padding: 1em 1.5em;
 	border-radius: 5px 5px 5px 5px;
 }
 
@@ -433,7 +432,10 @@ text-align: center;
 
 /*code stuff*/
 pre{
-	background: rgb(180,200,200);
+	background: rgb(190,230,245);
+	padding: 1em 1.5em;
+	color: rgb(50,70,100);
+	border-radius: 5px 5px 5px 5px;
 }
 /*image stuff*/
 .img-sq {
